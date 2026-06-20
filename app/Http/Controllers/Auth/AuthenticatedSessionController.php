@@ -28,7 +28,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Se añadió el mensaje flash aquí
+        return redirect()->intended(route('dashboard', absolute: false))
+                         ->with('status', '¡Bienvenido de nuevo, ' . auth()->user()->name . '!');
     }
 
     /**
