@@ -15,7 +15,7 @@
     <body class="font-sans antialiased bg-slate-950 text-white">
         <div class="min-h-screen">
             @include('layouts.navigation')
-
+            
             @if (session('status'))
                 <div class="max-w-7xl mx-auto px-6 pt-6">
                     <div class="bg-indigo-600/20 border border-indigo-500 text-indigo-400 p-4 rounded-2xl text-center font-medium shadow-lg">
@@ -26,7 +26,7 @@
 
             @isset($header)
                 <header>
-                    <div class="max-w-7xl mx-auto py-6 px-6">
+                    <div class="max-w-7xl mx-auto py-6 px-6 ">
                         {{ $header }}
                     </div>
                 </header>

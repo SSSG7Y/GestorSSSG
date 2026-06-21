@@ -13,17 +13,19 @@
                     </div>
             </div>
 
-            <div class="flex items-center gap-6">
-                <div class="hidden md:flex flex-col text-right">
-                    <span class="text-sm font-semibold text-white">{{ Auth::user()->name }}</span>
-                    <span class="text-xs text-slate-500">{{ Auth::user()->email }}</span>
+            <div class="flex items-center gap-4">
+                <div class="text-right">
+                    <p class="text-sm font-medium text-white">{{ Auth::user()->name }}</p>
+                    <p class="text-xs text-indigo-400 uppercase tracking-wider">
+                        {{ Auth::user()->getRoleNames()->first() ?? 'Sin rol' }}
+                    </p>
                 </div>
-                
+
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" 
                             class="px-5 py-2 rounded-xl bg-slate-800 hover:bg-red-900/50 hover:text-red-400 border border-slate-700 text-slate-300 text-sm font-medium transition-all duration-300">
-                        Cerrar sesión
+                            Cerrar sesión
                     </button>
                 </form>
             </div>

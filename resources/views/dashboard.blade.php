@@ -13,9 +13,9 @@
     </x-slot>
 
     <div class="py-10 bg-slate-950 min-h-screen">
-        <div class="max-w-7xl mx-auto px-6 bg">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                @foreach(['Proyectos' => ['12', 'indigo'], 'Tareas' => ['48', 'cyan'], 'Usuarios' => ['8', 'purple']] as $label => $data)
+                @foreach(['Proyectos' => [$totalProyectos, 'indigo'], 'Tareas' => [$totalTareas, 'cyan'], 'Usuarios' => [$totalUsuarios, 'purple']] as $label => $data)
                     <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 hover:border-slate-700 transition-colors">
                         <div class="flex items-center justify-between">
                             <div>
