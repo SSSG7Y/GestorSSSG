@@ -16,6 +16,14 @@
         <div class="min-h-screen">
             @include('layouts.navigation')
             
+            @if (session('success'))
+                <div class="max-w-7xl mx-auto px-6 pt-6">
+                    <div class="bg-green-600/20 border border-green-500 text-green-400 p-4 rounded-2xl text-center font-medium shadow-lg">
+                        {{ session('success') }}
+                    </div>
+                </div>
+            @endif
+
             @if (session('status'))
                 <div class="max-w-7xl mx-auto px-6 pt-6">
                     <div class="bg-indigo-600/20 border border-indigo-500 text-indigo-400 p-4 rounded-2xl text-center font-medium shadow-lg">

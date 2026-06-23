@@ -2,19 +2,25 @@
 
 namespace App\Models;
 
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
+
+    protected $fillable = [
+        'name', 
+        'email', 
+        'password',
+    ];
+
+    protected $hidden = [
+        'password', 
+        'remember_token',
+    ];
 
     protected function casts(): array
     {
@@ -31,18 +37,8 @@ class User extends Authenticatable
 
     public function projects()
     {
-        return $this->belongsToMany(Project::class)
-            ->withPivot('project_role')
-            ->withTimestamps();
-    }
-
-    public function assignedTasks()
-    {
-        return $this->hasMany(Task::class, 'assignee_id');
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
+        return $this->belongsToMany(Project::class, 'project_user')
+                    ->withPivot('project_role')
+                    ->withTimestamps();
     }
 }

@@ -24,8 +24,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('projects', ProjectController::class);
     Route::resource('projects.tasks', TaskController::class);
 
-    Route::patch('tasks/{task}/status', [TaskController::class, 'status'])->name('tasks.status');
-    Route::post('tasks/{task}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::patch('projects/{project}/tasks/{task}/status', [TaskController::class, 'status'])->name('projects.tasks.status');
+    
+    Route::post('projects/{project}/tasks/{task}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::post('projects/{project}/members', [MemberController::class, 'store'])->name('members.store');
     Route::delete('projects/{project}/members/{user}', [MemberController::class, 'destroy'])->name('members.destroy');

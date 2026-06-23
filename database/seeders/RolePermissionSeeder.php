@@ -2,24 +2,85 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $admin = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
-        $leader = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'leader']);
-        $member = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'member']);
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $p1 = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'create projects']);
-        $p2 = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'edit tasks']);
+        $permissions = [
 
-        $admin->givePermissionTo([$p1, $p2]);
-        $leader->givePermissionTo([$p1]);
+            'view projects',
+            'create projects',
+            'edit projects',
+            'delete projects',
+
+            'manage members',
+
+            'view tasks',
+            'create tasks',
+            'edit tasks',
+            'assign tasks',
+
+            'comment',
+
+            'manage users'
+
+        ];
+
+        foreach ($permissions as $permission) {
+
+            Permission::firstOrCreate([
+                'name' => $permission
+            ]);
+
+        }
+
+        $admin = Role::firstOrCreate([
+            'name' => 'admin'
+        ]);
+
+        $leader = Role::firstOrCreate([
+            'name' => 'leader'
+        ]);
+
+        $member = Role::firstOrCreate([
+            'name' => 'member'
+        ]);
+
+        $guest = Role::firstOrCreate([
+            'name' => 'guest'
+        ]);
+
+        $admin->givePermissionTo(Permission::all());
+
+        $leader->givePermissionTo([
+            'view projects',
+            'create projects',
+            'edit projects',
+            'manage members',
+            'view tasks',
+            'create tasks',
+            'assign tasks',
+            'comment'
+        ]);
+
+        $member->givePermissionTo([
+            'view projects',
+            'view tasks',
+            'edit tasks',
+            'comment'
+        ]);
+
+        $guest->givePermissionTo([
+            'view projects',
+            'comment'
+        ]);
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }
