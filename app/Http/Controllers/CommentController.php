@@ -15,29 +15,29 @@ class CommentController extends Controller
 
     public function store(Request $request, Project $project, Task $task)
     {
-        $this->authorize('create', [Comment::class, $task]);
+        $this->authorize('create', [Comment::class, $task]); 
 
-        $validated = $request->validate([
-            'cuerpo' => 'required|string|max:1000'
-        ]);
+        $validated = $request->validate(['cuerpo' => 'required|string|max:1000']);
 
         $task->comments()->create([
             'cuerpo' => $validated['cuerpo'],
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('projects.tasks.index', $project)
-                        ->with('success', 'Comentario publicado.');
+        return redirect()->route('projects.tasks.index', $project)->with('success', 'Comentario publicado correctamente.');
     }
 
-    public function destroy(Comment $comment)
+    public function destroy($id)
     {
+        $comment = Comment::findOrFail($id);
+
         $this->authorize('delete', $comment);
-        
+
         $project = $comment->task->project;
+
         $comment->delete();
         
         return redirect()->route('projects.tasks.index', $project)
-                        ->with('success', 'Comentario eliminado.');
+                        ->with('success', 'Comentario eliminado correctamente.');
     }
 }

@@ -36,9 +36,21 @@ class Project extends Model
             return $query;
         }
         return $query->where('owner_id', $user->id)
-                     ->orWhereHas('members', fn($q) => $q->where('user_id', $user->id));
+                        ->orWhereHas('members', fn($q) => $q->where('user_id', $user->id));
     }
     public function activities() {
         return $this->hasMany(Activity::class)->latest();
+    }
+    public function scopeFilter($query, array $filters) 
+    { 
+        $query->when($filters['search'] ?? null, function ($q, $search) { 
+            $searchTerm = '%' . strtolower(trim($search)) . '%';
+            
+            $q->whereRaw("unaccent(LOWER(nombre)) ILIKE unaccent(?)", [$searchTerm]);
+        });
+
+        $query->when($filters['estado'] ?? null, function ($q, $estado) {
+            $q->where('estado', $estado);
+        });
     }
 }

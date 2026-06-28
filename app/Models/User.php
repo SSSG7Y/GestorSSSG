@@ -41,4 +41,8 @@ class User extends Authenticatable
                     ->withPivot('project_role')
                     ->withTimestamps();
     }
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'assignee_id'); 
+    }
 }

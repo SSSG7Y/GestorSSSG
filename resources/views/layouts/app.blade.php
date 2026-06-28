@@ -13,7 +13,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased bg-slate-950 text-white">
-        <div class="min-h-screen">
+        <div class="min-h-screen flex flex-col">
             @include('layouts.navigation')
             
             @if (session('success'))
@@ -40,9 +40,11 @@
                 </header>
             @endisset
 
-            <main>
+            <main class="flex-grow">
                 {{ $slot }}
             </main>
+            
+            @include('layouts.footer')
         </div>
     </body>
 </html>

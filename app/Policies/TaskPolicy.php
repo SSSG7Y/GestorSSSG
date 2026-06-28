@@ -8,27 +8,36 @@ use App\Models\Project;
 
 class TaskPolicy
 {
-    private function canManageProject(User $user, Project $project): bool
+    private function isAdminOrOwner(User $user, Project $project): bool
     {
-        if ($user->hasRole('admin')) return true;
-        if ((int)$user->id === (int)$project->owner_id) return true;
-        
-        return $project->members()->where('user_id', $user->id)->exists();
+        return $user->hasRole('admin') || (int)$user->id === (int)$project->owner_id;
     }
 
-    public function create(User $user, Project $project): bool
+    private function isLeader(User $user, Project $project): bool
     {
-        return $this->canManageProject($user, $project);
+        return $project->members()->where('user_id', $user->id)->where('project_role', 'lider')->exists();
+    }
+
+    public function create(User $user, $project): bool
+    {
+        return $this->isAdminOrOwner($user, $project) || $this->isLeader($user, $project);
     }
 
     public function update(User $user, Task $task): bool
     {
-        return $this->canManageProject($user, $task->project);
+        return $this->isAdminOrOwner($user, $task->project) || 
+               $this->isLeader($user, $task->project) || 
+               (int)$user->id === (int)$task->assignee_id;
     }
 
     public function delete(User $user, Task $task): bool
     {
-        if ($user->hasRole('guest')) return false;
-        return $this->canManageProject($user, $task->project);
+        if ($user->hasRole('invitado')) return false;
+        return $this->isAdminOrOwner($user, $task->project) || $this->isLeader($user, $task->project);
+    }
+
+    public function assign(User $user, Task $task): bool
+    {
+        return $this->isAdminOrOwner($user, $task->project) || $this->isLeader($user, $task->project);
     }
 }

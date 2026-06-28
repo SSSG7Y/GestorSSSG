@@ -36,6 +36,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('users', [AdminUserController::class, 'index'])->name('admin.users.index');
         Route::post('users/{user}/roles', [AdminUserController::class, 'assignRole'])->name('admin.users.assignRole');
     });
+
+    Route::get('projects/{project}/tasks/{task}/assign', [TaskController::class, 'assignForm'])
+        ->name('projects.tasks.assign.form');
+    Route::patch('projects/{project}/tasks/{task}/assign', [TaskController::class, 'assignUpdate'])
+        ->name('projects.tasks.assign.update');
 });
 
 require __DIR__.'/auth.php';

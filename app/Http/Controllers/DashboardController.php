@@ -2,29 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\Comment;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard', [
+        $user = Auth::user();
 
-            'totalProyectos' => Project::count(),
+        $proyectosRecientes = Project::forUser($user)
+                                     ->latest()
+                                     ->take(5)
+                                     ->get();
 
-            'totalTareas' => Task::count(),
+        $tareasRecientes = $user->tasks()
+                                ->where('estado', '!=', 'completada')
+                                ->latest()
+                                ->take(3)
+                                ->get();
 
-            'totalUsuarios' => User::count(),
+        $totalProyectos = $user->hasRole(['admin', 'líder']) ? Project::count() : $user->projects()->count();
+        $totalTareas = $user->tasks()->count();
+        $totalUsuarios = User::count();
+        $totalComentarios = Comment::count();
 
-            'totalComentarios' => Comment::count(),
-
-            'proyectosRecientes' => Project::latest()->take(5)->get(),
-
-            'tareasRecientes' => Task::latest()->take(5)->get(),
-
-        ]);
+        return view('dashboard', compact(
+            'proyectosRecientes', 
+            'tareasRecientes', 
+            'totalProyectos', 
+            'totalTareas', 
+            'totalUsuarios', 
+            'totalComentarios'
+        ));
     }
 }

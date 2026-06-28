@@ -3,22 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 class ProjectController extends BaseController
 {
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        
-        // El scope ForUser maneja automáticamente la lógica de Admin, Leader o Miembro
-        $projects = Project::forUser($user)->latest()->paginate(10);
+
+        $projects = Project::forUser(Auth::user())
+            ->filter($request->only(['search', 'estado']))
+            ->paginate(10)
+            ->withQueryString(); 
 
         return view('projects.index', compact('projects'));
     }
@@ -40,11 +43,19 @@ class ProjectController extends BaseController
 
     public function show(Project $project)
     {
-        $activities = \App\Models\Activity::where('project_id', $project->id)
-                                        ->latest()
-                                        ->limit(10)
-                                        ->get();
-        return view('projects.show', compact('project', 'activities'));
+
+        $this->authorize('view', $project);
+
+        $project->load(['tasks', 'members']);
+        
+        $activities = Activity::where('project_id', $project->id)
+                                ->latest()
+                                ->limit(10)
+                                ->get();
+        
+        $project->setRelation('activities', $activities);
+
+        return view('projects.show', compact('project'));
     }
 
     public function edit(Project $project)
