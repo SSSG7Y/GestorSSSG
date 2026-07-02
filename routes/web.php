@@ -9,7 +9,7 @@ use App\Http\Controllers\{
     MemberController,
     AdminUserController,
     CommentController
-};
+}; 
 
 Route::get('/', fn () => view('welcome'))->name('home');
 
