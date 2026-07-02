@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        /*Project::observe(ActivityObserver::class);
+        Project::observe(ActivityObserver::class);
         Task::observe(ActivityObserver::class);
 
         Gate::policy(Task::class, TaskPolicy::class);
@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
 
         \Illuminate\Support\Facades\View::composer('layouts.navigation', function ($view) {
             /** @var \App\Models\User|null $user */
-           /* $user = \Illuminate\Support\Facades\Auth::user();
+            $user = \Illuminate\Support\Facades\Auth::user();
 
             if ($user) {
                 $proyectosNavegacion = $user->hasRole(['admin', 'líder']) 
@@ -47,6 +47,6 @@ class AppServiceProvider extends ServiceProvider
                     
                 $view->with('proyectosNavegacion', $proyectosNavegacion);
             }
-        });*/
+        });
     }
 }
