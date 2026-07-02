@@ -13,7 +13,7 @@ use App\Observers\ActivityObserver;
 use App\Policies\CommentPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\TaskPolicy;
-use Illuminate\Support\Facades\URL;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -48,6 +48,5 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('proyectosNavegacion', $proyectosNavegacion);
             }
         });
-        
     }
 }
