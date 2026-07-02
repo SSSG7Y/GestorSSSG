@@ -48,8 +48,6 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('proyectosNavegacion', $proyectosNavegacion);
             }
         });
-        if ($this->app->environment('production')) {
-            URL::forceScheme('https');
-        }
+        
     }
 }
