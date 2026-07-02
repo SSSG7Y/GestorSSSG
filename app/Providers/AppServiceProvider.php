@@ -13,7 +13,7 @@ use App\Observers\ActivityObserver;
 use App\Policies\CommentPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\TaskPolicy;
-
+use Illuminate\Support\Facades\URL;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
             }
         });
         if ($this->app->environment('production')) {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+            URL::forceScheme('https');
         }
     }
 }
