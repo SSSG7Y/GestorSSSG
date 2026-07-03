@@ -3,3 +3,12 @@ cmds = ["composer install --no-dev --optimize-autoloader", "npm install", "npm r
 
 [start]
 cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
+
+[phases.setup]
+nixPkgs = ["nodejs_20"] # Esto asegura que Node.js esté instalado
+
+[phases.build]
+cmds = ["npm install", "npm run build"]
+
+[start]
+cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
